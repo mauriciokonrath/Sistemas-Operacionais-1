@@ -70,3 +70,67 @@ o comando return 0; para encerrar o processo após a impressão da mensagem.
 
 
 
+3-  Escreva um programa em C no qual o processo pai cria 2 processos filhos e cada um dos processos 
+    filhos cria mais 2 processos filhos. Os processos filhos deverão imprimir na tela "Processo XX filho de YY", 
+    onde XX é o PID do processo e YY é o PID do pai do processo. 
+    Dica: utilize a função getpid() para retornar o PID do processo corrente e getppid() para retornar o PID do pai do processo corrente.
+
+
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/types.h>
+
+int main() {
+    pid_t pid1, pid2, pid3, pid4;
+
+    pid1 = fork();
+
+    if (pid1 == 0) {
+        // primeiro filho
+        pid3 = fork();
+        if (pid3 == 0) {
+            // neto 1
+            printf("Processo %d filho de %d\n", getpid(), getppid());
+        } else {
+            // neto 2
+            pid4 = fork();
+            if (pid4 == 0) {
+                printf("Processo %d filho de %d\n", getpid(), getppid());
+            } else {
+                // filho 1
+                printf("Processo %d filho de %d\n", getpid(), getppid());
+            }
+        }
+    } else {
+        pid2 = fork();
+        if (pid2 == 0) {
+            // segundo filho
+            pid3 = fork();
+            if (pid3 == 0) {
+                // neto 1
+                printf("Processo %d filho de %d\n", getpid(), getppid());
+            } else {
+                // neto 2
+                pid4 = fork();
+                if (pid4 == 0) {
+                    printf("Processo %d filho de %d\n", getpid(), getppid());
+                } else {
+                    // filho 2
+                    printf("Processo %d filho de %d\n", getpid(), getppid());
+                }
+            }
+        } else {
+            // pai
+            printf("Processo pai %d\n", getpid());
+        }
+    }
+
+    return 0;
+}
+
+Aqui, o processo pai cria dois processos filhos (pid1 e pid2) utilizando a função fork(). 
+Cada um dos processos filhos então cria dois processos filhos adicionais (pid3 e pid4), novamente usando a função fork().
+O programa então usa a função getpid() para obter o PID do processo corrente e getppid() para obter o PID do pai do 
+processo corrente e imprimir a mensagem correspondente na tela. A saída do programa será semelhante a esta:
+
+
