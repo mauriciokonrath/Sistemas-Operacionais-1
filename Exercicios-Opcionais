@@ -134,3 +134,61 @@ O programa então usa a função getpid() para obter o PID do processo corrente 
 processo corrente e imprimir a mensagem correspondente na tela. A saída do programa será semelhante a esta:
 
 
+4-  Escreva um programa em C que recebe via linha de comando a quantidade de processos a serem criados (procs). 
+    O processo principal (processo pai) cria procs processos filhos com uso da chamada de sistema fork(). 
+    Cada processo filho deverá ficar bloqueado durante um tempo aleatório entre 1s e 10s e deverá imprimir 
+    "Processo XX criado", onde XX é o PID do processo. Utilize as chamadas de sistema sleep() e getpid() para resolver esse exercício.
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/wait.h>
+#include <time.h>
+
+int main(int argc, char *argv[]) {
+    if (argc != 2) {
+        printf("Uso: %s <quantidade de processos a serem criados>\n", argv[0]);
+        return 1;
+    }
+
+    int procs = atoi(argv[1]);
+    pid_t pid;
+
+    srand(time(NULL));
+
+    for (int i = 0; i < procs; i++) {
+        pid = fork();
+
+        if (pid < 0) {
+            printf("Erro na criação do processo filho.\n");
+            return 1;
+        } else if (pid == 0) {
+            int sleep_time = rand() % 10 + 1;
+            sleep(sleep_time);
+            printf("Processo %d criado.\n", getpid());
+            exit(0);
+        }
+    }
+
+    for (int i = 0; i < procs; i++) {
+        wait(NULL);
+    }
+
+    printf("Todos os processos filhos terminaram.\n");
+
+    return 0;
+}
+
+Primeiramente, o programa verifica se o número correto de argumentos foi passado via linha de comando. 
+Caso contrário, é exibida uma mensagem de uso e o programa é encerrado com status de erro.
+Em seguida, a quantidade de processos a serem criados é convertida para inteiro a partir da string recebida via linha de comando. 
+É criada uma semente para geração de números aleatórios baseada no tempo atual, utilizando a função time(NULL).
+O laço for é utilizado para criar procs processos filhos. Na primeira iteração do laço, é chamada a função fork() que cria um processo filho. 
+O valor retornado pela função fork() é armazenado na variável pid. Caso o valor de pid seja menor que zero, 
+houve um erro na criação do processo filho e o programa é encerrado com status de erro. 
+Caso o valor de pid seja igual a zero, estamos no processo filho. É gerado um tempo aleatório entre 1s e 10s utilizando a função rand() 
+e sleep() é chamada para bloquear o processo filho pelo tempo gerado. Em seguida, é exibida uma mensagem informando o PID do processo filho 
+e a função exit() é chamada para encerrar a execução do processo filho com status de sucesso.
+No processo pai, o laço for é utilizado para aguardar a finalização de todos os processos filhos criados utilizando a função wait().
+Quando todos os processos filhos terminarem, é exibida uma mensagem informando que todos os processos filhos terminaram e o programa é 
+encerrado com status de sucesso.
