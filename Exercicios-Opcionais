@@ -1,0 +1,29 @@
+1-  Escreva um programa em C que cria um processo utilizando a chamada de sistema fork(). 
+    Ambos os processos pai e filho deverão imprimir na tela a frase "Novo processo criado!". 
+    Você deverá utilizar apenas um printf().
+ 
+ #include <stdio.h>
+ #include <unistd.h>
+
+
+int main() {
+    pid_t pid = fork();  // cria um novo processo
+
+
+    if (pid < 0) {  // verifica se ocorreu um erro ao criar o processo
+        printf("Erro ao criar processo!");
+    } else if (pid == 0) {  // verifica se o processo é o filho
+        printf("Novo processo criado!\n");
+    } else {  // caso contrário, é o pai
+        printf("Novo processo criado!\n");
+    }
+
+
+    return 0;
+}
+
+O programa cria um novo processo com a chamada de sistema fork() e armazena o valor de retorno na variável pid. 
+Em seguida, verifica-se se ocorreu algum erro na criação do processo. Caso contrário, se o valor de pid for igual a 0, 
+é o processo filho e imprime a frase "Novo processo criado!" na tela. Caso contrário, é o processo pai e também imprime a 
+mesma frase na tela. Note que foi utilizado um caractere de quebra de linha (\n) no final da string para que a mensagem 
+seja exibida em linhas separadas.
