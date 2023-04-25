@@ -27,3 +27,46 @@ Em seguida, verifica-se se ocorreu algum erro na criação do processo. Caso con
 é o processo filho e imprime a frase "Novo processo criado!" na tela. Caso contrário, é o processo pai e também imprime a 
 mesma frase na tela. Note que foi utilizado um caractere de quebra de linha (\n) no final da string para que a mensagem 
 seja exibida em linhas separadas.
+
+
+
+2-  Escreva um programa em C no qual o processo pai cria 4 processos filhos. Para cada filho criado, 
+    o processo pai deverá imprimir na tela "Processo pai XX criou YY", onde XX é o PID do pai e YY o PID do filho. 
+    Além disso, os processos filhos deverão imprimir na tela "Processo filho XX", onde XX é o PID do filho. 
+    Dica: utilize a função getpid() para retornar o PID do processo corrente.
+
+
+#include <stdio.h>
+#include <unistd.h>
+
+
+int main() {
+    pid_t pid;
+    int i;
+
+
+    for (i = 1; i <= 4; i++) {  // cria 4 processos filhos
+        pid = fork();
+        if (pid == 0) {  // se for o processo filho
+            printf("Processo filho %d\n", getpid());
+            return 0;
+        } else if (pid < 0) {  // se ocorrer um erro
+            printf("Erro ao criar processo filho!\n");
+            return 1;
+        } else {  // se for o processo pai
+            printf("Processo pai %d criou %d\n", getpid(), pid);
+        }
+    }
+
+
+    return 0;
+}
+
+O programa utiliza um loop para criar 4 processos filhos, e para cada um deles verifica se o processo atual é o pai ou 
+o filho utilizando o valor de retorno da chamada de sistema fork(). Se for o processo filho, imprime a mensagem 
+"Processo filho XX", onde XX é o PID do filho, utilizando a função getpid(). Se for o processo pai, imprime a mensagem 
+"Processo pai XX criou YY", onde XX é o PID do pai e YY é o PID do filho. Note que, no caso dos processos filhos, é utilizado 
+o comando return 0; para encerrar o processo após a impressão da mensagem.
+
+
+
