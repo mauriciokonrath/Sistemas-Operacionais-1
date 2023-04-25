@@ -192,3 +192,58 @@ e a função exit() é chamada para encerrar a execução do processo filho com 
 No processo pai, o laço for é utilizado para aguardar a finalização de todos os processos filhos criados utilizando a função wait().
 Quando todos os processos filhos terminarem, é exibida uma mensagem informando que todos os processos filhos terminaram e o programa é 
 encerrado com status de sucesso.
+
+
+
+
+
+
+
+
+
+
+1-  Qual a função de um escalonador?
+O escalonador é responsável por gerenciar o acesso aos recursos do sistema e decidir qual processo ou thread será executado pelo processador em um determinado momento. Sua principal função é alocar o tempo de processamento da CPU de forma justa e eficiente entre os processos e threads que competem pelos recursos do sistema. Além disso, o escalonador também é responsável por gerenciar as prioridades dos processos e threads, permitindo que processos críticos ou de maior importância recebam prioridade na alocação de recursos. Em resumo, o escalonador é um componente essencial do sistema operacional, que garante a execução correta e eficiente das tarefas do sistema e dos programas em execução.
+Em quais momentos do ciclo de vida de um processo um escalonador pode ser necessário?
+O escalonador é necessário em diferentes momentos do ciclo de vida de um processo, como:
+Quando um processo é criado: o escalonador é responsável por selecionar qual processo recém-criado deve ser executado primeiro.
+Quando um processo é bloqueado: se um processo está bloqueado, aguardando uma entrada/saída, o escalonador deve selecionar outro processo para executar no intervalo de tempo.
+Quando um processo é interrompido: se um processo está executando e é interrompido (por exemplo, para executar uma rotina de serviço do sistema), o escalonador precisa selecionar qual processo deve ser executado em seguida.
+Quando um processo termina: o escalonador precisa selecionar qual processo deve ser executado em seguida.
+Em resumo, o escalonador é necessário para decidir qual processo deve ser executado em determinado momento, levando em consideração diversos fatores, como prioridades, tempo de execução, entradas e saídas, entre outros.
+
+
+2-  Explique a diferença entre um algoritmo de escalonamento preemptivo e não preemptivo.
+Os algoritmos de escalonamento preemptivo e não preemptivo são diferentes em relação à capacidade do sistema operacional em interromper a execução de um processo em andamento para permitir a execução de outro processo.
+O escalonamento preemptivo permite que o sistema operacional interrompa a execução de um processo em andamento para permitir a execução de outro processo. Nesse caso, o processo em execução é "preemptado" (ou interrompido) antes de sua conclusão e colocado de volta na fila de processos prontos para execução. Isso ocorre devido a um evento como a chegada de um processo mais prioritário, o término de um E/S ou a expiração de um determinado tempo de execução.
+Por outro lado, os algoritmos de escalonamento não preemptivos não permitem a interrupção de um processo em andamento e, portanto, só são executados até a conclusão ou até a espera por um evento de E/S. Em outras palavras, o processo em execução é executado até o seu término antes que o próximo processo possa ser executado.
+Assim, em resumo, a principal diferença entre os dois tipos de algoritmos de escalonamento é a capacidade de interromper a execução de um processo em andamento para permitir a execução de outro processo mais prioritário.
+
+
+3-  Explique, com auxílio de exemplos, as diferenças entre os algoritmos FCFS e SJF.
+FCFS (First-Come, First-Served) e SJF (Shortest Job First) são dois algoritmos de escalonamento de processos em sistemas operacionais.
+O algoritmo FCFS é um algoritmo de escalonamento não preemptivo, onde os processos são escalonados de acordo com a ordem de chegada, ou seja, 
+o processo que chega primeiro é executado primeiro. A principal desvantagem desse algoritmo é que ele não leva em consideração o tempo de execução dos processos, 
+o que pode levar a um tempo médio de espera longo, especialmente se um processo de longa duração chegar primeiro. á o algoritmo SJF é um algoritmo de escalonamento 
+preemptivo ou não preemptivo, onde os processos são escalonados de acordo com o tempo de execução necessário. O processo mais curto é executado primeiro, 
+independentemente da ordem de chegada. Este algoritmo é considerado ótimo em termos de tempo médio de espera, mas pode levar a situações de inanição (starvation) 
+se houver processos longos que cheguem continuamente
+
+
+
+4-  No algoritmo de escalonamento por alternância circular, quais são as vantagens e desvantagens de se utilizar um quantum grande e pequeno?
+O algoritmo de escalonamento por alternância circular, também conhecido como Round Robin, utiliza um conceito de fatia de tempo (quantum) para garantir a execução justa dos processos. Quando um processo é selecionado para execução, ele é executado por um determinado tempo (quantum) antes de ser interrompido para dar espaço a outro processo. O processo interrompido é colocado de volta na fila de processos prontos para executar novamente em um futuro próximo.
+A escolha do valor do quantum é uma questão de trade-off entre a eficiência e a justiça no escalonamento dos processos.
+Se o quantum for grande, a quantidade de tempo de CPU alocada para cada processo é maior, o que pode levar a um melhor desempenho do sistema em termos de throughput (quantidade de trabalho concluído em um determinado período de tempo). No entanto, se um processo tiver uma grande quantidade de trabalho para realizar, ele pode ocupar a CPU por um longo período de tempo antes de ser interrompido, o que pode levar a uma diminuição da responsividade do sistema. Por exemplo, se o quantum for 100ms e um processo demorar 95ms para concluir sua execução, ele terá que esperar outros 100ms antes de ter a oportunidade de executar novamente, mesmo que não haja outros processos prontos para executar.
+Por outro lado, se o quantum for pequeno, a quantidade de tempo de CPU alocada para cada processo é menor, o que pode levar a uma melhor responsividade do sistema, uma vez que um processo será interrompido mais frequentemente para dar oportunidade a outros processos. No entanto, o overhead de troca de contexto (interrupção de um processo e a escolha de outro processo para executar) pode tornar-se significativo se o quantum for muito pequeno, diminuindo a eficiência do sistema em termos de throughput.
+Portanto, a escolha do valor do quantum depende das características do sistema e dos processos que serão executados. Um valor de quantum razoável é aquele que não compromete a responsividade do sistema e, ao mesmo tempo, mantém a eficiência do sistema em termos de throughput.
+
+
+Explique como evitar o problema da postergação indefinida no algoritmo de prioridade com auxílio de um exemplo.
+O problema da postergação indefinida ocorre quando processos com baixa prioridade nunca são executados, pois processos com maior prioridade sempre são escalonados antes. Para evitar esse problema, é possível utilizar o conceito de envelhecimento (aging), onde a cada unidade de tempo que um processo espera na fila de baixa prioridade, sua prioridade é aumentada. Dessa forma, com o passar do tempo, um processo que inicialmente possuía baixa prioridade pode ter sua prioridade elevada para que possa ser executado.
+Assim, os jobs com tempos de execução menores são executados primeiro, seguidos pelo job de tempo de execução X, que será executado por último.
+Essa ordem minimiza o tempo médio de retorno porque os jobs mais curtos serão executados rapidamente, liberando a CPU para a execução dos próximos jobs. Quando o job de tempo de execução X for executado, os demais jobs já terão terminado, permitindo que ele execute sem interrupções e sem causar grandes atrasos.
+
+
+
+
